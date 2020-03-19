@@ -11,12 +11,16 @@ $ yarn install;
 # dev
 
 ```bash
-$ yarn run dev --pipelineName XXX;
+$ export AWS_PROFILE=XXX;
+$ yarn run dev \
+  --pipelineName XXX;
 ```
 
 ## deploy
 
 ```bash
 $ export AWS_PROFILE=XXX;
-$ yarn run deploy --stage staging --pipelineName XXX --profile XXX;
+$ yarn run deploy \
+  --serviceName cp-stater \
+  --pipelineName XXX;
 ```
