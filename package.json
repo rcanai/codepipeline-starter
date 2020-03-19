@@ -1,0 +1,23 @@
+{
+  "name": "codepipeline-starter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "sls offline",
+    "deploy": "sls deploy",
+    "remove": "sls remove",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.642.0"
+  },
+  "devDependencies": {
+    "serverless": "^1.66.0",
+    "serverless-offline": "^6.0.0-alpha.68",
+    "serverless-prune-plugin": "^1.4.2"
+  }
+}

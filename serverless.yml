@@ -1,0 +1,65 @@
+service: "${self:custom.SERVICE_NAME}"
+
+provider:
+  
+  name: aws
+  runtime: nodejs12.x
+  region: ap-northeast-1
+  logRetentionInDays: 7
+  stage: ${self:custom.ENV}
+  profile: ${self:custom.PROFILE}
+  timeout: 30
+  memorySize: 512
+  environment:
+    NODE_ENV: ${self:custom.ENV}
+    PIPELINE_NAME: ${self:custom.PIPELINE_NAME}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - codepipeline:startPipelineExecution
+      Resource: "arn:aws:codepipeline:ap-northeast-1:*:${self:custom.PIPELINE_NAME}/*"
+
+plugins:
+  - serverless-offline
+  - serverless-prune-plugin
+
+custom:
+  ENV: ${opt:stage, "staging"}
+  PROFILE: ${opt:profile, "xxx"}
+  SERVICE_NAME: ${opt:serviceName, "cp-stater"}
+  API_KEY: ${opt:apiKey, "fixmefixmefixmefixme"}
+  PIPELINE_NAME: ${opt:pipelineName, "fixme"}
+  prune:
+    automatic: true
+    number: 3
+  serverless-offline:
+    port: 4000
+
+package:
+  exclude:
+    - .**
+    - README.md
+
+functions:
+  hc:
+    handler: index.handler
+    events:
+      - http:
+          method: POST
+          path: /start
+          cors: true
+
+resources:
+  Resources:
+
+  # 出力値
+  Outputs:
+    ApiGatewayRestApiId:
+      Value:
+        Ref: ApiGatewayRestApi # APIGWのID (Serverlessの仕様)
+      Export:
+        Name: ${self:custom.ENV}-${self:custom.SERVICE_NAME}-apiId
+    ApiGatewayApiKey:
+      Value: ${self:custom.API_KEY}
+      Export:
+        Name: ${self:custom.ENV}-${self:custom.SERVICE_NAME}-apiKey
